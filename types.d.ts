@@ -1,5 +1,5 @@
 
-declare module 'dbus-next' {
+declare module '@jellybrick/dbus-next' {
     import { EventEmitter } from "events";
 
     export type ObjectPath = string;
