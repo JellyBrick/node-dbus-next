@@ -26,7 +26,7 @@ import type { SignatureNode } from '@/signature';
  *
  * @static
  */
-export const ACCESS_READ = 'read';
+export const ACCESS_READ: PropertyAccess = 'read';
 
 /**
  * Used for [`Interface`]{@link module:interface~Interface} [property]{@link
@@ -35,7 +35,7 @@ export const ACCESS_READ = 'read';
  *
  * @static
  */
-export const ACCESS_WRITE = 'write';
+export const ACCESS_WRITE: PropertyAccess = 'write';
 
 /**
  * Used for [`Interface`]{@link module:interface~Interface} [property]{@link
@@ -44,7 +44,7 @@ export const ACCESS_WRITE = 'write';
  *
  * @static
  */
-export const ACCESS_READWRITE = 'readwrite';
+export const ACCESS_READWRITE: PropertyAccess = 'readwrite';
 
 export type PropertyAccess = 'read' | 'write' | 'readwrite';
 
