@@ -13,9 +13,12 @@ results
 /coverage
 /out
 /doc
+/dist
 
 node_modules
 npm-debug.log
 
 *.swp
 *.swo
+
+.idea
