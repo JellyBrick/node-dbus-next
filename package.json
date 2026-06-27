@@ -1,6 +1,6 @@
 {
   "name": "@jellybrick/dbus-next",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "description": "The next great DBus library for Node",
   "keywords": [
     "dbus",
