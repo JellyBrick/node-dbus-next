@@ -1,5 +1,9 @@
-import Builder, { type XMLBuilder } from 'fast-xml-builder';
+import BuilderExport, { type XMLBuilder, type XMLBuilderConstructor } from 'fast-xml-builder';
 import { XMLParser } from 'fast-xml-parser';
+
+const Builder: XMLBuilderConstructor =
+  (BuilderExport as XMLBuilderConstructor & { default?: XMLBuilderConstructor }).default ??
+  BuilderExport;
 
 const ARRAY_TAGS = ['node', 'interface', 'method', 'signal', 'property', 'arg', 'annotation'];
 
