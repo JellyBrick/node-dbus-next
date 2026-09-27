@@ -36,21 +36,33 @@ const hexlify = (input: string): string => {
   return Buffer.from(input.toString(), 'ascii').toString('hex');
 };
 
+const isValidCookieContext = (context: string): boolean =>
+  context.length > 0 &&
+  Array.from(context).every((char) => {
+    const code = char.charCodeAt(0);
+    return code > 0 && code <= 0x7f && !'/\\ \n\r\t.'.includes(char);
+  });
+
 const getCookie = async (context: string, id: string): Promise<string> => {
   // http://dbus.freedesktop.org/doc/dbus-specification.html#auth-mechanisms-sha
   const home = getUserHome();
   const dirname = join(home, '.dbus-keyrings');
   // > There is a default context, "org_freedesktop_general" that's used by servers that do not specify otherwise.
   const ctx = context.length === 0 ? 'org_freedesktop_general' : context;
+  if (!isValidCookieContext(ctx)) {
+    throw new Error('invalid cookie context');
+  }
   const filename = join(dirname, ctx);
 
-  // check it's not writable by others and readable by user
+  // check it's not readable or writable by other users
   const st = await stat(dirname);
-  if (st.mode & 0o22) {
-    throw new Error('User keyrings directory is writeable by other users. Aborting authentication');
+  if (st.mode & 0o66) {
+    throw new Error(
+      'User keyrings directory is readable or writeable by other users. Aborting authentication',
+    );
   }
-  const getuid = process.getuid;
-  if (getuid !== undefined && st.uid !== getuid.call(process)) {
+  const geteuid = process.geteuid;
+  if (geteuid !== undefined && st.uid !== geteuid.call(process)) {
     throw new Error(
       'Keyrings directory is not owned by the current user. Aborting authentication!',
     );
@@ -138,8 +150,8 @@ const authenticate = async (
 };
 
 const tryAuth = async (stream: DBusStream, methods: string[]): Promise<string> => {
-  const getuid = process.getuid;
-  const uid = getuid !== undefined ? getuid.call(process) : 0;
+  const geteuid = process.geteuid;
+  const uid = geteuid !== undefined ? geteuid.call(process) : 0;
   const id = hexlify(`${uid}`);
 
   let serverMechanisms: Set<string> | undefined;
