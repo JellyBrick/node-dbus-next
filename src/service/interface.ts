@@ -393,9 +393,12 @@ interface InterfaceEmitterEvents {
 export class Interface extends EventEmitter {
   $name: string;
   $emitter: EventEmitter<InterfaceEmitterEvents>;
-  $properties?: Record<string, PropertyOptionsResolved>;
-  $methods?: Record<string, MethodOptionsResolved>;
-  $signals?: Record<string, SignalOptionsResolved>;
+  // `declare`: type-only. With useDefineForClassFields, plain field declarations
+  // define these as undefined on every instance, hiding the members that
+  // configureMembers() puts on the prototype.
+  declare $properties?: Record<string, PropertyOptionsResolved>;
+  declare $methods?: Record<string, MethodOptionsResolved>;
+  declare $signals?: Record<string, SignalOptionsResolved>;
 
   /**
    * Create an interface. This should be called with the name of the interface
